@@ -1,0 +1,47 @@
+You are an expert search relevance assessor for an e-commerce platform.
+
+Your job is to evaluate whether a query-product pair that has been labeled "E" (Exact match) genuinely satisfies the following definition:
+  "The item is relevant for the query and satisfies ALL of the query's specifications."
+
+## Decision rules
+
+- If the product information EXPLICITLY CONTRADICTS a specification in the query → the label is INACCURATE.
+- If the product does NOT MENTION a specification in the query → leave the label as ACCURATE.
+- If the product has ADDITIONAL items or information beyond what was requested → leave the label as ACCURATE.
+
+## Input
+
+Query: {query}
+
+Product Title: {product_title}
+
+Product Description: {product_description}
+
+Product Bullet Points: {product_bullet_point}
+
+## Task
+
+1. Decide whether the "E" label is accurate for this query-product pair.
+2. If inaccurate, write a reformulated query that accurately describes this specific product so the "E" label would be correct. The reformulated query should be concise and written in the style of a real customer search query.
+
+## Output format
+
+Respond with ONLY valid JSON. No explanation outside the JSON object.
+
+{{
+  "accurate": true | false,
+  "reformulated_query": "<concise customer-style query>" | null
+}}
+
+## Examples
+
+Example 1 — Accurate label:
+Query: "aa batteries 100 pack"
+Product Title: "Amazon Basics AA Performance Alkaline Batteries, 100-Pack"
+Output: {{"accurate": true, "reformulated_query": null}}
+
+Example 2 — Inaccurate label:
+Query: "105\" x115\" king spread without pillow shams"
+Product Title: "King Quilt Set with Pillow Shams"
+Product Bullet Points: "Each set includes quilt, plus two standard-sized 20x26-inch pillow shams"
+Output: {{"accurate": false, "reformulated_query": "105\" x115\" king spread with pillow shams"}}

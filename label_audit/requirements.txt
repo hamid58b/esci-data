@@ -1,0 +1,4 @@
+pandas
+pyarrow
+openai
+python-dotenv
