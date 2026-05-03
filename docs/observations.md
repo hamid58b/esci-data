@@ -52,3 +52,5 @@ Mislabeled rows:
 - use reasoner model to validate the results.
 - use different model and aggregate / ensemble the results via majority voting.
 - needs SME-validations or poroduct knowledge base (RAG or taxonomy) to be sure about the results.
+- add one line rational why llm thinks the label is accurate or not.
+- add llm-as-a-judge to the results.
