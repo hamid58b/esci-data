@@ -13,7 +13,7 @@ pip install -r requirements.txt
 
 **API key** — create a `.env` file at the repo root (one level above this folder):
 
-```
+```bash
 OPENAI_API_KEY=sk-...
 ```
 
@@ -27,6 +27,14 @@ python3 main.py
 ```
 
 Output is written to `label_audit/output/results.csv`.
+
+## Unit Tests
+
+From the `esci-data/label_audit` directory, run:
+
+```bash
+python3 -m unittest discover -s tests
+```
 
 ## Notebook
 
@@ -42,7 +50,7 @@ The notebook covers data exploration, prompt iteration, full audit run, and resu
 ## Output columns
 
 | Column | Description |
-|---|---|
+| --- | --- |
 | `query_id` | Query identifier |
 | `product_id` | Product identifier |
 | `label_accurate` | `True` if the "E" label is correct, `False` if mislabeled |

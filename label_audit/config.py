@@ -5,7 +5,7 @@ DATA_DIR = ROOT.parent / "shopping_queries_dataset"
 OUTPUT_DIR = ROOT / "output"
 PROMPT_PATH = ROOT / "prompts" / "audit.txt"
 
-MODEL_NAME = "gpt-4o-mini"
+MODEL_NAME = "gpt-5.4-mini"
 TEMPERATURE = 0.0
 
 TARGET_QUERIES = [
