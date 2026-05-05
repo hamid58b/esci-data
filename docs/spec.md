@@ -10,6 +10,7 @@ In practice, some query-product pairs are mislabeled "E" — the product explici
 This project audits all "E"-labeled pairs for three target queries, flags mislabeled ones, and reformulates the query to correctly describe an "exact match" for those products.
 
 **Target queries:**
+
 - `aa batteries 100 pack`
 - `kodak photo paper 8.5 x 11 glossy`
 - `dewalt 8v max cordless screwdriver kit, gyroscopic`
@@ -33,7 +34,7 @@ esci-data/                              ← repo root (existing)
 ├── docs/
 │   └── spec.md                         ← this file
 │
-├── label_audit/                        ← all new project code lives here
+├── label_audit/                        ← all project code for the audit lives here
 │   ├── notebooks/
 │   │   └── audit.ipynb                 ← explore → develop prompt → run → analyze
 │   │
@@ -49,6 +50,10 @@ esci-data/                              ← repo root (existing)
 │   │
 │   ├── output/                         ← generated results land here (gitignored)
 │   │   └── .gitkeep
+│   │
+│   ├── tests/
+│   │   ├── test_llm.py                 ← unit tests for LLM client behavior
+│   │   └── llm-as-a-judge.py           ← placeholder for judge-style eval flow
 │   │
 │   ├── config.py                       ← model name, target queries, column names
 │   ├── main.py                         ← end-to-end runner (CLI entry point)
@@ -85,12 +90,14 @@ This produces the working set. Expected size: O(tens to low hundreds) of rows.
 ### Step 3 — Per-row LLM audit
 
 For each row, pass the following context to the LLM:
+
 - `query`
 - `product_title`
 - `product_description`
 - `product_bullet_point`
 
 The LLM returns a structured response (JSON):
+
 ```json
 {
   "accurate": true | false,
@@ -116,12 +123,13 @@ Write to `output/results.csv`.
 
 ## LLM Design
 
-**Model:** `gpt-4o-mini` (configurable via `config.py`)
+**Model:** `gpt-5.4-mini` (configurable via `config.py`)
 
 **Prompt location:** `prompts/audit.txt`  
 The prompt is loaded from disk at runtime — never hardcoded in Python.
 
 **Prompt structure (defined in `audit.txt`):**
+
 1. Role: expert search relevance assessor
 2. Task definition + the three ambiguity rules (verbatim from spec)
 3. Input schema (query, product fields)
@@ -137,6 +145,7 @@ The prompt is loaded from disk at runtime — never hardcoded in Python.
 ## Module Responsibilities
 
 ### `config.py`
+
 - `MODEL_NAME`: `"gpt-4o-mini"`
 - `TARGET_QUERIES`: list of three query strings
 - `DATA_DIR`: path to `shopping_queries_dataset/`
@@ -144,23 +153,29 @@ The prompt is loaded from disk at runtime — never hardcoded in Python.
 - `PROMPT_PATH`: path to `prompts/audit.txt`
 
 ### `src/data.py`
+
 - `load_example_products(data_dir) -> pd.DataFrame` — merge and return full joined frame
 - `filter_audit_set(df, queries) -> pd.DataFrame` — apply scope filter
 
 ### `src/llm.py`
+
 - `LLMClient(model, prompt_path)` — holds the OpenAI client and loaded prompt
 - `audit_pair(query, product_fields) -> dict` — single call, returns parsed JSON dict
 - Handles retry on parse error (max 1 retry)
 
 ### `src/auditor.py`
+
 - `run_audit(df, llm_client) -> pd.DataFrame` — iterates rows, calls `llm_client.audit_pair`, collects results
 
 ### `src/output.py`
+
 - `write_results(df, output_dir)` — writes `results.csv`
 - `print_summary(df)` — prints counts to stdout
 
 ### `main.py`
+
 End-to-end runner:
+
 ```
 1. Load config
 2. Build df_example_products, filter to audit set
@@ -170,6 +185,7 @@ End-to-end runner:
 ```
 
 Usage:
+
 ```bash
 cd label_audit
 python main.py

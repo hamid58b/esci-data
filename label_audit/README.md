@@ -28,6 +28,30 @@ python3 main.py
 
 Output is written to `label_audit/output/results.csv`.
 
+## Folder Hierarchy
+
+```text
+label_audit/
+├── notebooks/
+│   └── audit.ipynb
+├── src/
+│   ├── __init__.py
+│   ├── data.py
+│   ├── llm.py
+│   ├── auditor.py
+│   └── output.py
+├── prompts/
+│   └── audit.txt
+├── output/
+│   └── .gitkeep
+├── tests/
+│   ├── test_llm.py
+│   └── llm-as-a-judge.py
+├── config.py
+├── main.py
+└── requirements.txt
+```
+
 ## Unit Tests
 
 From the `esci-data/label_audit` directory, run:
